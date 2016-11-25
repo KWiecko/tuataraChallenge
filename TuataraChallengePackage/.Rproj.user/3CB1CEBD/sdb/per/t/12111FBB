@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n\n\ngetCaretDataSample <- function(dataFrameToSplit, columnToSplitBy, nOfRows, nOfSplits, localSeed){\n\n  library(caret)\n  library(dplyr)\n\n  pParam <- round(nOfRows/length(dataFrameToSplit[,1] %>% unlist() %>% as.vector()), 3)\n\n  set.seed(localSeed)\n  subsetIdx <- createDataPartition(columnToSplitBy, p = pParam, times = nOfSplits)\n  listOfTrimmedDatasets <- lapply(subsetIdx, function(x){\n                                                                  return(dataFrameToSplit[x,])\n                                                                  })\n\n\n}\n",
+    "created" : 1479771522008.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "43718251",
+    "id" : "12111FBB",
+    "lastKnownWriteTime" : 1479856164,
+    "last_content_update" : 1479856164641,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/getCaretDataSample.R",
+    "project_path" : "R/getCaretDataSample.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 6,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n\nselectBestCorrelatedToLoss <- function(inputDataFrame){\n\n  corTestVect <- c()\n  #leadLag <- 10\n  #corrTreshold <- 0.15\n\n  for(colname in colnames(inputDataFrame[, !(colnames(inputDataFrame) %in% c(\"id\", \"loss\"))])){\n\n\n\n    corTestVect <- c(corTestVect,\n\n                     cor( unlist(\n                       inputDataFrame[, (colnames(inputDataFrame) %in% paste0(colname))]\n                     ),\n                     inputDataFrame$loss,\n                     method = \"spearman\")\n\n    ) %>%\n      abs()\n  }\n\n  corTestDF <- data.frame(corTestVect, colnames(inputDataFrame[, !(colnames(inputDataFrame) %in% c(\"id\", \"loss\"))])) %>%\n    arrange(desc(corTestVect))\n  names(corTestDF) <- c(\"corToLoss\",\"colName\")\n\n  corTestDF <- corTestDF %>%\n    filter(corToLoss >= 0.1)\n\n  return(corTestDF)\n\n}\n",
+    "created" : 1480035594008.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "772254845",
+    "id" : "66FED884",
+    "lastKnownWriteTime" : 1480035972,
+    "last_content_update" : 1480035972009,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/selectBestCorrelatedToLoss.R",
+    "project_path" : "R/selectBestCorrelatedToLoss.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 12,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

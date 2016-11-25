@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#' Function loads data from my HDFS\n#'\n#' @param  none, names are fixed\n#' @return list of 3 elements: spark connection reference, train dataset in spark ref., test dataset in spark ref.,\n#' @export\nreadInitialDataFromHDFS <- function(sc){\n# setting env varjust in case - may vary depending on system\nSys.setenv(SPARK_HOME = \"/usr/local/spark\")\n\n#loading rquired packages\nlibrary(TuataraChallengePackage)\nlibrary(sparklyr)\nlibrary(dplyr)\n\n\n#connecting\n#sc <- spark_connect(master = \"yarn-client\")\n\n#loading data from kaggle to hdfs\n#done via flume\n\n#loading training dataset to hdfs\nmyTrnDataset <- spark_read_csv(sc, \"myTrnData\", \"/konrad/tuatara/myTrnData/myTrnData\")\n\n#loading testing dataset to hdfs\nmyTstDataset <- spark_read_csv(sc, \"myTstData\", \"/konrad/tuatara/myTstData/myTstData\")\n\nlistToReturn <- list(sc, myTrnDataset, myTstDataset)\nnames(listToReturn) <- c(\"connectionObj\", \"myTrnDataset\", \"myTstDataset\")\nreturn(listToReturn)\n}\n",
+    "created" : 1479763977794.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "3472384162",
+    "id" : "82202AF9",
+    "lastKnownWriteTime" : 1479952890,
+    "last_content_update" : 1479952890009,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/readInitialDataFromHDFS.R",
+    "project_path" : "R/readInitialDataFromHDFS.R",
+    "properties" : {
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

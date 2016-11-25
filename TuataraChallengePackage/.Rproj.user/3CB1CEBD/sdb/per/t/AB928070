@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n\nsimplifyColnamesForCorrPlot <- function(colnamesInputDatasetMatrix){\n\n  newColNames <- gsub(pattern = \"cont\", replacement = \"c\", colnamesInputDatasetMatrix) %>%\n    gsub(pattern = \"cat\", replacement = \"\", .)\n\n  return(newColNames)\n\n}\n",
+    "created" : 1479952625884.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "409604197",
+    "id" : "AB928070",
+    "lastKnownWriteTime" : 1479952823,
+    "last_content_update" : 1479952823759,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/simplifyColnamesForCorrPlot.R",
+    "project_path" : "R/simplifyColnamesForCorrPlot.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 9,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

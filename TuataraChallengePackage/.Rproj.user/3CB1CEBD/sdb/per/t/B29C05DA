@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n\nsimpleFactorizer <- function(datasetToFactorize){\n\n  #loading rquired packages\n  library(TuataraChallengePackage)\n  library(sparklyr)\n  library(dplyr)\n\n\n\n\n\n  # getting columns to factorize\n  columnsToFactorize <- datasetToFactorize %>%\n    select(contains(\"cat\")) %>%\n    colnames()\n\n  for(counter in 2:(length(columnsToFactorize) + 1)){\n    # percentage print\n    print(paste0(\"Dataset factorized in \", round(100 * counter/(length(columnsToFactorize) + 1), 2) , \"%\"))\n\n    datasetToFactorize[, counter] <- factor(as.vector(unlist(datasetToFactorize[, counter])),\n                                     labels = c(1:length(levels(factor(as.vector(unlist(datasetToFactorize[, counter]))))) ) ) %>%\n                                     unlist() %>%\n                                     as.vector() %>%\n                                     as.integer()\n  }\n\n  return(datasetToFactorize);\n\n}\n",
+    "created" : 1479661765742.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "159876757",
+    "id" : "B29C05DA",
+    "lastKnownWriteTime" : 1479839593,
+    "last_content_update" : 1479839593471,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/simpleFactorizer.R",
+    "project_path" : "R/simpleFactorizer.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 5,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

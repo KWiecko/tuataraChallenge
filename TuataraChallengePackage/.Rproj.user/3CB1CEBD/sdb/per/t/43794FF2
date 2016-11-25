@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n#'\n\nadjRsq <- function(testDataset, predictionDataset, nObs, nPred, isLossLog){\n\n  adjRsqDF <- data.frame(testDataset$loss, predictionDataset$prediction)\n\n  names(adjRsqDF) <- c(\"loss\", \"pred\")\n\n  if(isLossLog){\n    adjRsqDF <- adjRsqDF %>% mutate(loss = exp(loss), pred = exp(pred))\n  }\n\n  meanLoss <- mean(testDataset$loss)\n  adjRsqDF <- adjRsqDF %>% mutate(rSQLicz = (pred - meanLoss)^2, rSQMian = (loss - meanLoss)^2, rmseLicz = (pred-loss)^2)\n  Rsq <- sum(adjRsqDF$rSQLicz)/sum(adjRsqDF$rSQMian)\n\n  adjRsq <- 1 - (1-Rsq)*(nObs - 1)/(nObs - nPred - 1)\n  RMSE <- sum(adjRsqDF$rmseLicz)/length(adjRsqDF$loss)\n\n  adjRsqList <- list(adjRsq, RMSE)\n\n  return(adjRsqList)\n}\n",
+    "created" : 1480042107359.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "512520110",
+    "id" : "43794FF2",
+    "lastKnownWriteTime" : 1480081725,
+    "last_content_update" : 1480081725189,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/adjRsq.R",
+    "project_path" : "R/adjRsq.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 13,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}
