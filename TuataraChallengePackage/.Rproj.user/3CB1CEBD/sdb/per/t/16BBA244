@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n\npackageInstaller <- function(){\n\n  requiredPackages <- c(\"car\", \"nortest\", \"fBasics\", \"Hmisc\",\n                        \"corrplot\", \"corrgram\", \"PerformanceAnalytics\",\n                        \"jmuOutlier\", \"PairedData\", \"energy\",\n                        \"corrr\", \"purrr\", \"fpc\", \"dplyr\", \"sparklyr\")\n  installedPacks <- installed.packages()[,1]\n  for(package in requiredPackages) {\n    if (sum(grepl(pattern = paste0(package), installedPacks)) !=0){\n      next\n    } else {\n      install.packages(paste0(package))\n      installedPacks <- installed.packages()[,1]\n    }\n  }\n\n  return(requiredPackages)\n}\n",
+    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n\npackageInstaller <- function(){\n\n  requiredPackages <- c(\"car\", \"nortest\", \"fBasics\", \"Hmisc\",\n                        \"corrplot\", \"corrgram\", \"PerformanceAnalytics\",\n                        \"jmuOutlier\", \"PairedData\", \"energy\",\n                        \"corrr\", \"purrr\", \"fpc\", \"dplyr\", \"sparklyr\")\n  installedPacks <- installed.packages()[,1]\n  for(package in requiredPackages) {\n    if (sum(grepl(pattern = paste0(package), installedPacks)) !=0){\n      next\n    } else {\n      install.packages(paste0(package))\n      installedPacks <- installed.packages()[,1]\n    }\n  }\n\n  return(requiredPackages)\n}\n",
     "created" : 1479947200738.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1171785724",
+    "hash" : "791105967",
     "id" : "16BBA244",
-    "lastKnownWriteTime" : 1479953888,
-    "last_content_update" : 1479953888709,
+    "lastKnownWriteTime" : 1480551283,
+    "last_content_update" : 1480551283218,
     "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/packageInstaller.R",
     "project_path" : "R/packageInstaller.R",
     "properties" : {

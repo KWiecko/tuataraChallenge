@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n#'\n\ntrainMyXGBModels <- function(sc, trainCase1CorrToLoss, treeDepth, subsetSize ,isLossLog){\n\n  library(sparklyr)\n  library(caret)\n  library(dplyr)\n\n  # Training GLM and XGB on this dataset\n  # subseting data\n  trainCase1CorrToLossFinal_subset <- getCaretDataSample(trainCase1CorrToLoss,\n                                                         trainCase1CorrToLoss$loss\n                                                         , subsetSize, 1, 1)\n  trainCase1CorrToLossFinal_subset <- trainCase1CorrToLossFinal_subset$Resample1\n\n  testCase1CorrToLossFinal_subset <- getCaretDataSample(trainCase1CorrToLoss[!(trainCase1CorrToLoss$id %in% trainCase1CorrToLossFinal_subset$id),],\n                                                        trainCase1CorrToLoss[!(trainCase1CorrToLoss$id %in% trainCase1CorrToLossFinal_subset$id), ]$loss,\n                                                        20000, 1, 2)\n  testCase1CorrToLossFinal_subset <- testCase1CorrToLossFinal_subset$Resample1\n\n  nObsCorrToLoss <- length(unlist(testCase1CorrToLossFinal_subset[,1]))\n  nPredCorrToLoss <- length(colnames(testCase1CorrToLossFinal_subset)) - 2\n\n  # sending data to spark\n  trainCase1CorrToLossFinal_subset_tbl <- copy_to(sc, trainCase1CorrToLossFinal_subset, \"trainCase1CorrToLoss\", overwrite = TRUE)\n  testCase1CorrToLossFinal_subset_tbl <- testCase1CorrToLossFinal_subset %>%\n    select(-loss) %>%\n    copy_to(sc, ., \"testCase1CorrToLoss\", overwrite = TRUE)\n  #                               training                      testing\n  datasets <- list(trainCase1CorrToLossFinal_subset, testCase1CorrToLossFinal_subset)\n  names(datasets) <- c(\"trn\", \"tst\")\n\n\n\n  # Training XGB model in spark\n  # max depth set to 2\n  trainCase1CorrToLossXGB <- trainCase1CorrToLossFinal_subset_tbl %>%\n    select(-id) %>%\n    ml_gradient_boosted_trees(loss ~., type = \"regression\", max.depth = treeDepth)\n\n\n\n  trainCase1CorrToLossPredictionsXGB_test <- select(testCase1CorrToLossFinal_subset_tbl , -id) %>%\n    sdf_predict(trainCase1CorrToLossXGB, .) %>%\n    collect()\n\n  adjRsqCorrToLossXGB2 <- adjRsq(testCase1CorrToLossFinal_subset, trainCase1CorrToLossPredictionsXGB_test, nObsCorrToLoss, nPredCorrToLoss, isLossLog)\n\n  #                           model                     predictions                               R sq adj\n  mod1_xgb <- list(trainCase1CorrToLossXGB, trainCase1CorrToLossPredictionsXGB_test, adjRsqCorrToLossXGB2)\n  names(mod1_xgb) <- c(\"model\", \"predDF\", \"RsqAdj\")\n\n\n  xgbMods <- list(mod1_xgb)\n  names(xgbMods) <- c(\"mod1\")\n\n  models <- list(xgbMods)\n  names(models) <- c(\"XGB\")\n\n  listToReturn <- list(models, datasets)\n  names(listToReturn) <- c(\"models\", \"datasets\")\n\n  return(listToReturn)\n\n}\n",
+    "created" : 1480375184874.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2930264812",
+    "id" : "FBA62730",
+    "lastKnownWriteTime" : 1480551412,
+    "last_content_update" : 1480551412787,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/trainMyXGBModels.R",
+    "project_path" : "R/trainMyXGBModels.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 17,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

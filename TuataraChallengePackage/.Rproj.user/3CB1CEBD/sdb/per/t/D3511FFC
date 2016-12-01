@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n\ncorrelationMatrixCreator <- function(inputDataset){\n\n  library(dplyr)\n  # library(car)\n  # library(nortest)\n  # library(fBasics)\n  # library(corrplot)\n  # library(corrgram)\n  # library(PerformanceAnalytics)\n  # library(jmuOutlier)\n  # library(PairedData)\n  # library(corrr)\n  # library(energy)\n  # library(purrr)\n\n  # converting dataset to matrix\n  inputDatasetMatrix <- inputDataset[,-1] %>%\n                        as.matrix(inputDataset)\n\n\n  inputDataCorrMtx <-round( cor(inputDatasetMatrix,\n                          method = \"spearman\"), 2) # most of variables are categorical/do not have normal distribution\n\n\n\nreturn(inputDataCorrMtx)\n\n}\n",
+    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n\ncorrelationMatrixCreator <- function(inputDataset){\n\n  library(dplyr)\n\n\n  # converting dataset to matrix\n  inputDatasetMatrix <- inputDataset[,-1] %>%\n                        as.matrix(inputDataset)\n\n\n  inputDataCorrMtx <-round( cor(inputDatasetMatrix,\n                          method = \"spearman\"), 2) # most of variables are categorical/do not have normal distribution\n\n\n\nreturn(inputDataCorrMtx)\n\n}\n",
     "created" : 1479949284636.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "956718891",
+    "hash" : "2951566136",
     "id" : "D3511FFC",
-    "lastKnownWriteTime" : 1479955779,
-    "last_content_update" : 1479955779161,
+    "lastKnownWriteTime" : 1480551316,
+    "last_content_update" : 1480551316977,
     "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/correlationMatrixCreator.R",
     "project_path" : "R/correlationMatrixCreator.R",
     "properties" : {

@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n\n\n\nremoveOutliers <- function(myInitialFactorizedData, numOfSDsToInclue){\n\n  lossLogSD <- sd(myInitialFactorizedData$myDatasetLog$loss)\n  lossLogMean <- mean(myInitialFactorizedData$myDatasetLog$loss)\n\n  myDatasetNoOutliers <- myInitialFactorizedData$myDataset %>%\n    filter(loss >= exp(lossLogMean - numOfSDsToInclue*lossLogSD) & loss <= exp(lossLogMean + numOfSDsToInclue*lossLogSD))\n\n  myDatasetLogNoOutliers <- myInitialFactorizedData$myDatasetLog %>%\n    filter(loss >= lossLogMean - numOfSDsToInclue*lossLogSD & loss <= lossLogMean + numOfSDsToInclue*lossLogSD )\n\n  listToReturn <- list(myDatasetNoOutliers$id, myDatasetLogNoOutliers$id)\n  names(listToReturn) <- c(\"idxNoOut\", \"IdxNoOutLog\")\n\n  return(listToReturn)\n\n}\n\n",
+    "created" : 1480369788572.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "804345517",
+    "id" : "BFEC0A14",
+    "lastKnownWriteTime" : 1480551403,
+    "last_content_update" : 1480551403214,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/removeOutliers.R",
+    "project_path" : "R/removeOutliers.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 16,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

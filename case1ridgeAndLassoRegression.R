@@ -13,16 +13,23 @@ Sys.setenv(SPARK_HOME = "/usr/local/spark")
 # connecting to spark
 sc <- spark_connect(master = "spark://hadoopmasternode:7077")
 
-# # # # # # # # # # # # # # # # # # # #
-# readDataFromHDFS() output
-## list structure
-## List[[1]] <- spark connection object
-## List[[2]] <- training data from HDFS
-## List[[3]] <- testing data from HDFS
-
 myDataList <- readInitialDataFromHDFS(sc)
 
 myInitialFactorizedData <- factorizeMyDataset(myDataList, "train", "case1")
+
+lossLogSD <- sd(myInitialFactorizedData$myDatasetLog$loss)
+lossLogMean <- mean(myInitialFactorizedData$myDatasetLog$loss)
+
+myDatasetNoOutliers <- myInitialFactorizedData$myDataset %>%
+  filter(loss >= exp(lossLogMean - 2*lossLogSD) & loss <= exp(lossLogMean + 2*lossLogSD))
+
+myDatasetLogNoOutliers <- myInitialFactorizedData$myDatasetLog %>%
+  filter(loss >= lossLogMean - 2*lossLogSD & loss <= lossLogMean + 2*lossLogSD )
+
+## reusing existing variables to keep the code structure intact
+
+myInitialFactorizedData$myDataset <- myDatasetNoOutliers
+myInitialFactorizedData$myDatasetLog <- myDatasetLogNoOutliers
 
 ## creating a ridge regression model for normal dataset
 

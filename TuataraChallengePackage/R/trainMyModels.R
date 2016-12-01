@@ -1,13 +1,15 @@
 #'
-#' Function to factorize dataset loaded from HDFS
 #'
-#' @param  List returned by function 'readDataFromHDFS()'
-#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset
+#'
+#' @param
+#' @return
 #' @export
 #'
 #'
 
-trainMyModels <- function(sc, trainCase1CorrToLoss, isLossLog){
+trainMyModels <- function(sc, trainCase1CorrToLoss ,isLossLog, noOutliersIdxs, omitOutliersforTest, omitOutliersforTrain){
+
+  #c("idxNoOut", "IdxNoOutLog")
 
   library(sparklyr)
   library(caret)
@@ -15,8 +17,34 @@ trainMyModels <- function(sc, trainCase1CorrToLoss, isLossLog){
 
   # Training GLM and XGB on this dataset
   # subseting data
-  trainCase1CorrToLossFinal_subset <- getCaretDataSample(trainCase1CorrToLoss, trainCase1CorrToLoss$loss, 50000, 1, 1)
+
+
+  if(omitOutliersforTrain){
+    if(isLossLog){
+      trainCase1CorrToLossFinal_subset <- getCaretDataSample(trainCase1CorrToLoss[trainCase1CorrToLoss$id %in% noOutliersIdxs$IdxNoOutLog,],
+                                                             trainCase1CorrToLoss[trainCase1CorrToLoss$id %in% noOutliersIdxs$IdxNoOutLog,]$loss
+                                                             , 50000, 1, 1)
+    }else{
+      trainCase1CorrToLossFinal_subset <- getCaretDataSample(trainCase1CorrToLoss[trainCase1CorrToLoss$id %in% noOutliersIdxs$idxNoOut,],
+                                                             trainCase1CorrToLoss[trainCase1CorrToLoss$id %in% noOutliersIdxs$idxNoOut,]$loss
+                                                             , 50000, 1, 1)
+    }
+
+  } else {
+    trainCase1CorrToLossFinal_subset <- getCaretDataSample(trainCase1CorrToLoss,
+                                                           trainCase1CorrToLoss$loss
+                                                           , 50000, 1, 1)
+  }
+
   trainCase1CorrToLossFinal_subset <- trainCase1CorrToLossFinal_subset$Resample1
+
+  if(omitOutliersforTest){
+    if(isLossLog){
+      trainCase1CorrToLoss <- trainCase1CorrToLoss[trainCase1CorrToLoss$id %in% noOutliersIdxs$IdxNoOutLog, ]
+    } else {
+      trainCase1CorrToLoss <- trainCase1CorrToLoss[trainCase1CorrToLoss$id %in% noOutliersIdxs$idxNoOut, ]
+    }
+  }
 
   testCase1CorrToLossFinal_subset <- getCaretDataSample(trainCase1CorrToLoss[!(trainCase1CorrToLoss$id %in% trainCase1CorrToLossFinal_subset$id),],
                                                         trainCase1CorrToLoss[!(trainCase1CorrToLoss$id %in% trainCase1CorrToLossFinal_subset$id), ]$loss,

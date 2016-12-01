@@ -1,8 +1,8 @@
 #'
-#' Function loads data from my HDFS
 #'
-#' @param  none, names are fixed
-#' @return list of 3 elements: spark connection reference, train dataset in spark ref., test dataset in spark ref.,
+#'
+#' @param
+#' @return
 #' @export
 readInitialDataFromHDFS <- function(sc){
 # setting env varjust in case - may vary depending on system

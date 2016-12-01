@@ -1,0 +1,21 @@
+{
+    "collab_server" : "",
+    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n\n\n# Deselecting columns with very monolithical structure\n\nremoveMonovalCols <- function(inputDataframe){\n\n  library(dplyr)\n\n  idxToRemove <- c()\n\n  for(count in 2:(length(colnames(inputDataframe)) - 1 ) ){\n\n    if(length(levels(factor(inputDataframe[,count] %>% unlist() %>% as.vector()))) <= 2){\n\n      transferVect <- inputDataframe[,count] %>% unlist() %>% as.vector()\n      fractOfAppear <- length(transferVect[transferVect == as.integer(levels(factor(inputDataframe[count] %>% unlist() %>% as.vector))[1])])/length(transferVect)\n\n\n      if(fractOfAppear > 0.99 || fractOfAppear < 0.01){\n\n        idxToRemove <- c(idxToRemove, count)\n      }\n    }\n  }\n\n  inputDataframe <- inputDataframe[, -idxToRemove]\n\n  return(inputDataframe)\n}\n",
+    "created" : 1480364528999.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "4038708570",
+    "id" : "EA782D33",
+    "lastKnownWriteTime" : 1480551393,
+    "last_content_update" : 1480551393376,
+    "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/removeMonovalCols.R",
+    "project_path" : "R/removeMonovalCols.R",
+    "properties" : {
+        "tempName" : "Untitled1"
+    },
+    "relative_order" : 15,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_source"
+}

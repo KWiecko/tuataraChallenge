@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "#'\n#' Function to factorize dataset loaded from HDFS\n#'\n#' @param  List returned by function 'readDataFromHDFS()'\n#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset\n#' @export\n#'\n\n\nsignificantCorrelationSelector <- function(inputDataset){\n\n  corTestVect <- c()\n\n  for(colname in colnames(inputDataset[, !(colnames(inputDataset) %in% c(\"id\", \"loss\"))])){\n\n    corTestVect <- c(corTestVect,\n                     ifelse(cor.test( unlist(\n                       inputDataset[, (colnames(inputDataset) %in% paste0(colname))]\n                     ),\n                     inputDataset$loss,\n                     method = \"spearman\")$p.value >= 0.05, 0, 1)\n    )\n  }\n\n\n  signifCorrCols <- data.frame(colnames(inputDataset[, !(colnames(inputDataset) %in% c(\"id\", \"loss\"))]),\n                               corTestVect) %>% filter(corTestVect ==1)\n  names(signifCorrCols) <- c(\"signifCorrColsName\", \"isSignif\")\n  datasetToReturn <- signifCorrCols %>%\n                     select(signifCorrColsName) %>%\n                     unlist() %>%\n                     as.vector() %>%\n                     paste0(\"^\",., \"$\", collapse = \"|\") %>%\n                     grep(pattern = ., colnames(inputDataset)) %>%\n                     select(inputDataset,id, ., loss)\nreturn(datasetToReturn)\n\n}\n",
+    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n\n\nsignificantCorrelationSelector <- function(inputDataset){\n\n  corTestVect <- c()\n\n  for(colname in colnames(inputDataset[, !(colnames(inputDataset) %in% c(\"id\", \"loss\"))])){\n\n    corTestVect <- c(corTestVect,\n                     ifelse(cor.test( unlist(\n                       inputDataset[, (colnames(inputDataset) %in% paste0(colname))]\n                     ),\n                     inputDataset$loss,\n                     method = \"spearman\")$p.value >= 0.05, 0, 1)\n    )\n  }\n\n\n  signifCorrCols <- data.frame(colnames(inputDataset[, !(colnames(inputDataset) %in% c(\"id\", \"loss\"))]),\n                               corTestVect) %>% filter(corTestVect ==1)\n  names(signifCorrCols) <- c(\"signifCorrColsName\", \"isSignif\")\n  datasetToReturn <- signifCorrCols %>%\n                     select(signifCorrColsName) %>%\n                     unlist() %>%\n                     as.vector() %>%\n                     paste0(\"^\",., \"$\", collapse = \"|\") %>%\n                     grep(pattern = ., colnames(inputDataset)) %>%\n                     select(inputDataset,id, ., loss)\nreturn(datasetToReturn)\n\n}\n",
     "created" : 1480000490183.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1367611159",
+    "hash" : "1780663144",
     "id" : "C1F9A889",
-    "lastKnownWriteTime" : 1480009255,
-    "last_content_update" : 1480009255860,
+    "lastKnownWriteTime" : 1480551336,
+    "last_content_update" : 1480551336942,
     "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/significantCorrelationSelector.R",
     "project_path" : "R/significantCorrelationSelector.R",
     "properties" : {

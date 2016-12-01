@@ -1,8 +1,8 @@
 #'
-#' Function to factorize dataset loaded from HDFS
 #'
-#' @param  List returned by function 'readDataFromHDFS()'
-#' @return List: [[1]] Sparklyr connection object, [[2]] Factorized training dataset [[3]] Factorized testing dataset
+#'
+#' @param
+#' @return
 #' @export
 #'
 #'

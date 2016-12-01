@@ -13,37 +13,14 @@ Sys.setenv(SPARK_HOME = "/usr/local/spark")
 # connecting to spark
 sc <- spark_connect(master = "spark://hadoopmasternode:7077")
 
-# # # # # # # # # # # # # # # # # # # #
-# readDataFromHDFS() output
-## list structure
-## List[[1]] <- spark connection object
-## List[[2]] <- training data from HDFS
-## List[[3]] <- testing data from HDFS
 
 myDataList <- readInitialDataFromHDFS(sc)
 
 
-# # # # # # # # # # # # # # # # # # # #
-## collecting data for data manipulation activities
-
-# myTrnDataset <- collect(myDataList[[2]])
-# myTestDataset <- collect(myDataList[[3]])
-
-## factorizeMyDataset()
-##  Initial data manipulation explained in the factorizeMyDataset()'s code comments 
-## arguments:
-## - list with initial datasets and spark connection object
-## - "train"/"test" string indicating which dataset should be factorized
 
 myInitialFactorizedData <- factorizeMyDataset(myDataList, "train", "case2")
-##
-## returns:
-## 
-## List[[1]] <- spark connection object
-## List[[2]] <- training data from HDFS -> letters converted to ints
-## List[[3]] <- testing data from HDFS -> letters converted to ints
 
-# # # # # # # # # # # # # # # # # # # #
+trainIdxsWithoutOutliers <- removeOutliers(myInitialFactorizedData, 2)
 
 # Initial Machine learning on Spark
 #### GLM case
@@ -62,23 +39,23 @@ myInitialFactorizedData <- factorizeMyDataset(myDataList, "train", "case2")
           bestCorrelatedColsToLoss <- selectBestCorrelatedToLoss(trainCase2SignifCorr)
           trainCase2CorrToLoss <- trainCase2SignifCorr[, colnames(trainCase2SignifCorr) %in% c(as.character(bestCorrelatedColsToLoss$colName), "id", "loss")]
           
-          case2CorrToLoss <- trainMyModels(sc, trainCase2CorrToLoss, FALSE)
+          case2CorrToLoss <- trainMyModels(sc, trainCase2CorrToLoss, FALSE, trainIdxsWithoutOutliers, FALSE, FALSE)
           
           
           # dataset where loss = log(loss)
           bestCorrelatedColsToLossLog <- selectBestCorrelatedToLoss(trainCase2SignifCorrLog)
           trainCase2CorrToLossLog <- trainCase2SignifCorrLog[, colnames(trainCase2SignifCorrLog) %in% c(as.character(bestCorrelatedColsToLossLog$colName), "id", "loss")]
           
-          case2CorrToLossLog <-  trainMyModels(sc, trainCase2CorrToLossLog, TRUE)
+          case2CorrToLossLog <-  trainMyModels(sc, trainCase2CorrToLossLog, TRUE, trainIdxsWithoutOutliers, FALSE, FALSE)
           
           # selectWeakCorrelatedColumns( dataset, number of columns that are best correlated with 'loss' to omit, correlation treshold for columns)
           #normal dataset
           trainCase2WeakCorr <- selectWeakCorrelatedColumns(trainCase1SignifCorr, 1, 0.15)
           
-          case2WeakCorr <-  trainMyModels(sc, trainCase2WeakCorr, FALSE)
+          case2WeakCorr <-  trainMyModels(sc, trainCase2WeakCorr, FALSE, trainIdxsWithoutOutliers, FALSE, FALSE)
           
           # dataset where loss = log(loss)
           trainCase2WeakCorrLog <- selectWeakCorrelatedColumns(trainCase1SignifCorrLog, 1, 0.15)
           
-          case2WeakCorrLog <-  trainMyModels(sc, trainCase2WeakCorrLog, TRUE)
+          case2WeakCorrLog <-  trainMyModels(sc, trainCase2WeakCorrLog, TRUE, trainIdxsWithoutOutliers, FALSE, FALSE)
 

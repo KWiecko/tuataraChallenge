@@ -1,0 +1,75 @@
+---
+title: "Tuatara Challenge Files Description"
+author: "Konrad Wiecko"
+date: "November 29, 2016"
+output: 
+  html_document:
+    theme: spacelab
+    highlight: zenburn
+    toc: true
+    toc_depth: 5
+    toc_float: true
+    number_sections: true
+---
+# Presentation
+
+Presentation is placed in 'tuataraChallengeReport' folder inside this repo. Final report is avaliable as a html file.
+
+# Files in tuataraChallenge/ folder:
+
+## tuataraMainScriptCase1.R
+
+In this file the basic machine learning only on 'case1' factorized data subset is performed. There are two sets of columns selected: 
+  
+  - `trainCase1CorrToLoss` which includes columns that are at least in weak correlation to 'loss' variable
+  
+  - `trainCase1WeakCorr` which includes columns that are at least in weak correlation to 'loss' variable and have no greater correlation factor than 0.15 between themselves
+  
+  Adjusted R^2 and MSE is computed on a test subset. Learning dataset contains ~ 50000 records and test dataset contains ~ 20000 records.
+
+## tuataraMainScriptCase1.R
+
+In this file the basic machine learning only on 'case2' factorized data subset is performed. There are two sets of columns selected: 
+  
+  - `trainCase2CorrToLoss` which includes columns that are at least in weak correlation to 'loss' variable
+  
+  - `trainCase2WeakCorr` which includes columns that are at least in weak correlation to 'loss' variable and have no greater correlation factor than 0.15 between themselves
+  
+  Adjusted R^2 and MSE is computed on a test subset. Learning dataset contains ~ 50000 records and test dataset contains ~ 20000 records.
+  
+## tuataraMainScriptCase1XGBAllCols.R
+
+In this file gradient boosted trees are trained on all avaliable columns. Adjusted R^2 and MSE is computed on a test subset. Learning dataset contains ~ 50000 records and test dataset contains ~ 20000 records.
+
+## tuataraMainScriptCase1TestNoOutliers.R
+
+In this file the basic machine learning only on 'case1' factorized data subset is performed. `TestNoOutliers` indicates that the model is trained on the dataes with the outliers however it is tested on the dataset without the observations where 'loss' does not fit in the 95% (mean(loss) +- 2*sd(loss)) of the area of log(loss) distribution. It is done to check how strong is the outliers' influence on the model
+There are two sets of columns selected: 
+  
+  - `trainCase1CorrToLoss` which includes columns that are at least in weak correlation to 'loss' variable
+  
+  - `trainCase1WeakCorr` which includes columns that are at least in weak correlation to 'loss' variable and have no greater correlation factor than 0.15 between themselves
+  
+  Adjusted R^2 and MSE is computed on a test subset. Learning dataset contains ~ 50000 records and test dataset contains ~ 20000 records.
+
+## tuataraMainScriptCase1OutliersNeglected.R
+
+In this file the basic machine learning only on 'case1' factorized data subset is performed. `OutliersNeglected` indicates that the model is trained and tested against the dataset without the outliers. Outliers are defined as the observations outside the 95% (mean(loss) +- 2*sd(loss)) area of log(loss) distribution for log(loss) is normal distribution
+There are two sets of columns selected: 
+  
+  - `trainCase1CorrToLoss` which includes columns that are at least in weak correlation to 'loss' variable
+  
+  - `trainCase1WeakCorr` which includes columns that are at least in weak correlation to 'loss' variable and have no greater correlation factor than 0.15 between themselves
+  
+  Adjusted R^2 and MSE is computed on a test subset. Learning dataset contains ~ 50000 records and test dataset contains ~ 20000 records.
+
+## tuataraMainScriptCase2OutliersNeglected.R
+
+In this file the basic machine learning only on 'case2' factorized data subset is performed. `OutliersNeglected` indicates that the model is trained and tested against the dataset without the outliers. Outliers are defined as the observations outside the 95% (mean(loss) +- 2*sd(loss)) area of log(loss) distribution for log(loss) is normal distribution
+There are two sets of columns selected: 
+  
+  - `trainCase2CorrToLoss` which includes columns that are at least in weak correlation to 'loss' variable
+  
+  - `trainCase2WeakCorr` which includes columns that are at least in weak correlation to 'loss' variable and have no greater correlation factor than 0.15 between themselves
+  
+  Adjusted R^2 and MSE is computed on a test subset. Learning dataset contains ~ 50000 records and test dataset contains ~ 20000 records.
