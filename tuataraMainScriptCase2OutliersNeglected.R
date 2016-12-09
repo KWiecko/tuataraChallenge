@@ -47,14 +47,14 @@ myInitialFactorizedData$myDatasetLog <- myDatasetLogNoOutliers
 
 ######### Selecting most correlated vars with 'loss' and least with each other
           #normal dataset
-          bestCorrelatedColsToLoss <- selectBestCorrelatedToLoss(trainCase2SignifCorr)
+          bestCorrelatedColsToLoss <- selectBestCorrelatedToLoss(trainCase2SignifCorr, 0.2)
           trainCase2CorrToLoss <- trainCase2SignifCorr[, colnames(trainCase2SignifCorr) %in% c(as.character(bestCorrelatedColsToLoss$colName), "id", "loss")]
           
           case2CorrToLoss <- trainMyModels(sc, trainCase2CorrToLoss, FALSE)
           
           
           # dataset where loss = log(loss)
-          bestCorrelatedColsToLossLog <- selectBestCorrelatedToLoss(trainCase2SignifCorrLog)
+          bestCorrelatedColsToLossLog <- selectBestCorrelatedToLoss(trainCase2SignifCorrLog, 0.2)
           trainCase2CorrToLossLog <- trainCase2SignifCorrLog[, colnames(trainCase2SignifCorrLog) %in% c(as.character(bestCorrelatedColsToLossLog$colName), "id", "loss")]
           
           case2CorrToLossLog <-  trainMyModels(sc, trainCase2CorrToLossLog, TRUE)

@@ -35,7 +35,7 @@ trainIdxsWithoutOutliers <- removeOutliers(myInitialFactorizedData, 2)
 
 ######### Selecting most correlated vars with 'loss' and least with each other
           #normal dataset
-          bestCorrelatedColsToLoss <- selectBestCorrelatedToLoss(trainCase1SignifCorr)
+          bestCorrelatedColsToLoss <- selectBestCorrelatedToLoss(trainCase1SignifCorr, 0.1)
           trainCase1CorrToLoss <- trainCase1SignifCorr[, colnames(trainCase1SignifCorr) %in% c(as.character(bestCorrelatedColsToLoss$colName), "id", "loss")]
           
           #trainMyModels <- function(sc, trainCase1CorrToLoss ,isLossLog, noOutliersIdxs, omitOutliersforTest, omitOutliersforTrain)
@@ -43,7 +43,7 @@ trainIdxsWithoutOutliers <- removeOutliers(myInitialFactorizedData, 2)
           
           
           # dataset where loss = log(loss)
-          bestCorrelatedColsToLossLog <- selectBestCorrelatedToLoss(trainCase1SignifCorrLog)
+          bestCorrelatedColsToLossLog <- selectBestCorrelatedToLoss(trainCase1SignifCorrLog, 0.1)
           trainCase1CorrToLossLog <- trainCase1SignifCorrLog[, colnames(trainCase1SignifCorrLog) %in% c(as.character(bestCorrelatedColsToLossLog$colName), "id", "loss")]
           
           case1CorrToLossLog <-  trainMyModels(sc, trainCase1CorrToLossLog, TRUE, trainIdxsWithoutOutliers, FALSE, FALSE)
@@ -59,6 +59,24 @@ trainIdxsWithoutOutliers <- removeOutliers(myInitialFactorizedData, 2)
           
           case1WeakCorrLog <-  trainMyModels(sc, trainCase1WeakCorrLog, TRUE, trainIdxsWithoutOutliers, FALSE, FALSE)
 
+          # TESTING
+          
+          myInitialFactorizedDataTest <- factorizeMyDataset(myDataList, "test", "case1")
+          myInitialFactorizedDataTest <- myInitialFactorizedDataTest$myDataset 
+          myInitialFactorizedDataTest <- myInitialFactorizedDataTest[, colnames(myInitialFactorizedDataTest) %in% c(as.character(bestCorrelatedColsToLoss$colName), "id")]
+          myInitialFactorizedDataTest_tbl <- copy_to(sc, myInitialFactorizedDataTest, 'propperTest')
+          
+          kagglePred <- select(myInitialFactorizedDataTest_tbl, -id) %>%
+            sdf_predict(case1CorrToLoss$models$XGB$mod2$model, .) %>%
+            collect()
+          
+          kagglePred <- kagglePred %>%
+            select(prediction)
+          
+          kagglePred <- cbind(myInitialFactorizedDataTest$id, kagglePred)
+          names(kagglePred) <- c("id", "loss")
+          library(readr)
+          write_csv(kagglePred, "submission1.csv")
           
 
 

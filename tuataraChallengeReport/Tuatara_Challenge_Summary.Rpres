@@ -1,9 +1,10 @@
-Tuatara Challenge
+Projekt Tuatara Challenge
 ========================================================
 author: Konrad Więcko
 css: myStyles.css
-date: 27.11.2016
 autosize: true
+
+
 
 
 
@@ -14,7 +15,7 @@ transition-speed: slow
 class: normalSlide
 
 
-Próba predykcji kwoty odszkodowania na podstawie danych udostępnionych przez firmę Allstate w serwisie kaggle.com
+Predykcja kwoty odszkodowania na podstawie danych udostępnionych przez firmę Allstate w serwisie kaggle.com
 
 https://www.kaggle.com/c/allstate-claims-severity
 
@@ -28,7 +29,7 @@ class: normalSlide
 - Schemat wykorzystanej infrastruktury obliczeniowej
 - Wstępne manipulacje danymi
 - Pierwsza próba uczenia maszynowego
-- Próba poprawienia predykcji
+- Poprawa predykcji
 - Podsumowanie projektu
 
 
@@ -42,8 +43,8 @@ class: normalSlide
 - Wykorzystanie R jako:
   - interfejsu do obsługi HDFS'a oraz SPARK'a (sparklyr)
   - narzędzia do bardziej złożonych manipulacji danymi
-- Weryfikacja/próba optymalizacji modeli otrzymanych w Apache Spark'u
-- Napisanie pakietu w R ułatwiającego pracę z danymi
+- Weryfikacja/Optymalizacja modeli stworzonych w Apache Spark'u
+- Napisanie pakietu ułatwiającego pracę z danymi w R: https://github.com/KWiecko/tuataraChallenge
 
 Schemat wykorzystanej infrastruktury obliczeniowej
 ========================================================
@@ -57,22 +58,25 @@ class: normalSlide
 class: normalSlide
  Schemat przetwarzania danych:
   - Dane za pomocą Apache Flume'a były ładowane do HDFS
-  - Dane za poprzez RStudio (sparklyr) były odczytywane z HDFS, ładowane do Apache Spark'a, a następnie do pamięci w celu wykonania określonych manipulacji
-  - Dane po manipulacjach były ładowane do Apache Spark'a w celu przeprowadzenia na nich uczenia maszynowego
-  - W celu weryfikacji dany były powtórnie ładowane do RStudio
+  - Dane poprzez RStudio (sparklyr) były odczytywane z HDFS, ładowane do Apache Spark'a, a następnie do pamięci w celu wykonania określonych manipulacji
+  - Dane po manipulacjach były ładowane do Apache Spark'a aby przeprowadzić na nich uczenie maszynowe
+  - W celu weryfikacji dane były powtórnie ładowane do RStudio
   
 Schemat wykorzystanej infrastruktury obliczeniowej
 ========================================================
 class: normalSlide
+
   ![alt text](pictures/workflowScheme.png)
 
 Wstępne manipulacje danymi
 ========================================================
 class: normalSlide
 Ogólna charakterystyka danych:
-  - Wartość odszkodowania miała rozkład log-normalny. Z tego względu zdecydowano się na przygotowanie dwóch przypadków zbioru danych:
-    1. Zmienna `loss` pozostawiona bez zmian (`loss` osnaczało wysokość odszkodowania)
-    2. Zmienna `loss` została zlogatyrmowana loss' = ln(`loss`)
+
+Wartość odszkodowania miała rozkład log-normalny. Z tego względu zdecydowano się na przygotowanie dwóch przypadków zbioru danych:
+
+   1. Zmienna `loss` pozostawiona bez zmian (`loss` osnaczało wysokość odszkodowania)
+   2. Zmienna `loss` została zlogatyrmowana loss' = ln(`loss`)
 
 Wstępne manipulacje danymi
 ========================================================
@@ -85,7 +89,8 @@ Wstępne manipulacje danymi
 ========================================================
 class: normalSlide
 Ogólna charakterystyka danych c.d.:
-  - Zmienne generalnie nie mały rozkładów normalnych
+
+Zmienne przeważnie nie mały rozkładów normalnych
   
    ![](pictures/contHist.png)
     
@@ -102,16 +107,17 @@ Ogólna charakterystyka danych c.d.
  Wstępne manipulacje danymi
 ========================================================
 class: normalSlide
-  - Zmienne często były ze sobą mocno skorelowane
-    ![](pictures/correlationScheme.png)
+Zmienne często były ze sobą mocno skorelowane
+
+  ![](pictures/correlationScheme.png)
 
  Wstępne manipulacje danymi
 ========================================================
 class: normalSlide
 Po zapoznaniu się z danymi zaproponowana została następująca faktoryzacja zbioru danych:
-  - przypadek 1. - mapowanie liter na cyfry/liczby indywidualnie - w skryptach oznaczane jako 'case1'
+  - przypadek 1. mapowanie liter na cyfry/liczby indywidualnie - w skryptach oznaczane jako 'case1'
     ![](pictures/case1DataExample.png)
-  - przypadek 2. - mapowanie liter na cyfry/liczby globalnie - w skryptach oznaczane jako 'case2'
+  - przypadek 2. mapowanie liter na cyfry/liczby globalnie - w skryptach oznaczane jako 'case2'
     ![](pictures/case2DataExample.png)
     
 
@@ -125,32 +131,31 @@ Algorytmy wykorzystane do uczenia maszynowego:
 
 Wszystkie modele były porównywane ze sobą przy wykorzystaniu:
 
- ![](pictures/mse.png)
- ![](pictures/rAdj.png)
+ ![](pictures/crit.png)
  
- Ponadto modele z typu GLM porównywane były ze sobą za pomocą współczynnika AIC
+ Ponadto modele liniowe porównywane były ze sobą za pomocą kryterium informacyjnego Akaikego (AIC)
  
-  Uczenie maszynowe
+  Poprawa predykcji
+========================================================
+class: normalSlide
+
+Pierwsza iteracja uczenia maszynowego - RMSE ~= 2500
+
+W celu poprawienia predykcji modeli:
+  - Ze zbioru wszystkich zmiennych zostały wybrane takie, których korelacja ze zmienną `loss` była istotna statystycznie
+  - Ze zbioru wszystkich zmiennych zostały wybrane takie, których korelacja ze zmienną `loss` była co najmniej słaba (współczynnik korelacji >= 0.1)
+   - Ze zbioru wszystkich zmiennych skorelowanych co najmniej słabo ze zmienną `loss` zostały wybrane takie, których wzajemna korelacja nie przekraczała 0.15
+   - Ze zbioru treningowego zostały usunięte obserwacje odstające (pozostawiono jedynie obserwacje mieszczące się w przedziale +- 2 odchylenia standardowe od średniej ln(`loss`))
+   - modele XGB miały zadawaną różną głębokość drzewa
+   
+    Poprawa predykcji
 ========================================================
 class: normalSlide
 Pierwszy etap uczenia maszynowego został wykonany za pomocą biblioteki MLlib zgodnie ze schematem:
 
 ![](pictures/mlDiagram.png)
-
-  Próba poprawienia predykcji
-========================================================
-class: normalSlide
-
-Pierwsza iteracja uczenia maszynowego - R = 0.3
-
-W celu poprawienia predykcji modeli:
-  - Ze wszystkich zmiennych zostały wybrane zmienne, których korelacja ze zmienną `loss` była istotna statystycznie
-  - Ze wszystkich zmiennych zostały wybrane zmienne, których korelacja ze zmienną `loss` była co najmniej słaba (współczynnik korelacji >= 0.1)
-   - Ze wszystkich zmiennych skorelowanych co najmniej słabo ze zmienną `loss` zostały wybrane takie, których wzajemna korelacja nie przekraczała 0.15
-   - Ze zbioru treningowego zostały usunięte obserwacje odstające (pozostawiono jedynie obserwacje mieszczące się w przedziale +- 2 odchylenia standardowe od średniej ln(`loss`))
-   - modele XGB miały zadawaną różną głębokość drzewa
    
-   Próba poprawienia predykcji
+   Poprawa predykcji
 ========================================================
 class: normalSlide
 Wykresy R^2 dla różnych modeli liniowych oraz zbiorów treningowych i testowych:
@@ -158,7 +163,7 @@ Wykresy R^2 dla różnych modeli liniowych oraz zbiorów treningowych i testowyc
 ![](pictures/glmStats.png)
 
 
-  Próba poprawienia predykcji
+  Poprawa predykcji
 ========================================================
 class: normalSlide
 Wpływ głębokości drzewa oraz zestawu danych na RMSE
@@ -166,20 +171,32 @@ Wpływ głębokości drzewa oraz zestawu danych na RMSE
 ![](pictures/xgbRMSE.png)
 
 
-  Próba poprawienia predykcji
+  Poprawa predykcji
 ========================================================
 class: normalSlide
 Próba wykorzystania algorytmów 'lasso' oraz 'ridge'
 
 ![](pictures/lassoAndRidge.png)
 
+  Poprawa predykcji
+========================================================
+class: normalSlide
+
+Wyniki (Score = MAE):
+
+![](pictures/wyniki.png)
+
   Wnioski
 ========================================================
 class: normalSlide
-- Najmniejszym średnim błedem kwadratowym (po 'usunięciu' wartości odstających) charakteryzował się model XGB o maksymalnej głębokości drzewa równej 5,  trenowany na zbiorze 'case1' gdy loss' = ln(loss) oraz zmiennych silnie skorelowanych ze zmienną `loss`
-- Wśród modeli liniowych najlepsze parametry osiągnął model trenowany na zbiozre 'case1' (po 'usunięciu' wartości odstających) oraz zmiennych silnie skorelowanych ze zmienną `loss`
-- Najlepsze spośród modeli XGB oraz GLM osiągały zbliżóne wartości średniego błędu kwadratowego
+- Najmniejszym pierwiastkiem średniego błędu kwadratowego (po usunięciu wartości odstających) charakteryzował się model XGB o maksymalnej głębokości drzewa równej 5,  trenowany na zbiorze 'case1' oraz zmiennych co najmniej słabo skorelowanych ze zmienną `loss`
+- Wśród modeli liniowych najlepsze parametry osiągnął model trenowany na zbiorze 'case1' (po usunięciu wartości odstających) oraz zmiennych silnie skorelowanych ze zmienną `loss`
+- Najlepsze spośród modeli XGB oraz GLM osiągały zbliżone wartości średniego błędu kwadratowego
 - Metody lasso oraz ridge nie podniosły jakości modelu
+
+
+
+
 
   Problemy, które wystąpiły w czasie trwania projektu
 ========================================================

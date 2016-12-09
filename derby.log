@@ -1,13 +1,13 @@
 ----------------------------------------------------------------
-Wed Nov 30 21:40:02 CET 2016:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0158-b6f7-2d14-00000ae21670 
-on database directory /home/konrad/Desktop/GitFolder/TuataraChallenge/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@1bee113b 
+Mon Dec 05 19:59:44 CET 2016:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.12.1.1 - (1704137): instance a816c00e-0158-d05b-2596-00000bcb3060 
+on database directory /home/konrad/Desktop/GitFolder/TuataraChallenge/metastore_db with class loader org.apache.spark.sql.hive.client.IsolatedClientLoader$$anon$1@67c5be8a 
 Loaded from file:/usr/local/spark/jars/derby-10.12.1.1.jar
 java.vendor=Oracle Corporation
 java.runtime.version=1.8.0_111-8u111-b14-2ubuntu0.16.04.2-b14
 user.dir=/home/konrad/Desktop/GitFolder/TuataraChallenge
 os.name=Linux
 os.arch=amd64
-os.version=4.4.0-47-generic
+os.version=4.4.0-51-generic
 derby.system.home=null
 Database Class Loader started - derby.database.classpath=''

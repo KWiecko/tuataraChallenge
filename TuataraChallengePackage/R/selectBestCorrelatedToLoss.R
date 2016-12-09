@@ -6,11 +6,11 @@
 #' @export
 #'
 
-selectBestCorrelatedToLoss <- function(inputDataFrame){
+selectBestCorrelatedToLoss <- function(inputDataFrame, corrTreshold){
 
   corTestVect <- c()
   #leadLag <- 10
-  #corrTreshold <- 0.15
+
 
   for(colname in colnames(inputDataFrame[, !(colnames(inputDataFrame) %in% c("id", "loss"))])){
 
@@ -33,7 +33,7 @@ selectBestCorrelatedToLoss <- function(inputDataFrame){
   names(corTestDF) <- c("corToLoss","colName")
 
   corTestDF <- corTestDF %>%
-    filter(corToLoss >= 0.1)
+    filter(corToLoss >= corrTreshold)
 
   return(corTestDF)
 

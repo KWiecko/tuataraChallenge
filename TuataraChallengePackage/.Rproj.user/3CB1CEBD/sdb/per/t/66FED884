@@ -1,14 +1,14 @@
 {
     "collab_server" : "",
-    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n\nselectBestCorrelatedToLoss <- function(inputDataFrame){\n\n  corTestVect <- c()\n  #leadLag <- 10\n  #corrTreshold <- 0.15\n\n  for(colname in colnames(inputDataFrame[, !(colnames(inputDataFrame) %in% c(\"id\", \"loss\"))])){\n\n\n\n    corTestVect <- c(corTestVect,\n\n                     cor( unlist(\n                       inputDataFrame[, (colnames(inputDataFrame) %in% paste0(colname))]\n                     ),\n                     inputDataFrame$loss,\n                     method = \"spearman\")\n\n    ) %>%\n      abs()\n  }\n\n  corTestDF <- data.frame(corTestVect, colnames(inputDataFrame[, !(colnames(inputDataFrame) %in% c(\"id\", \"loss\"))])) %>%\n    arrange(desc(corTestVect))\n  names(corTestDF) <- c(\"corToLoss\",\"colName\")\n\n  corTestDF <- corTestDF %>%\n    filter(corToLoss >= 0.1)\n\n  return(corTestDF)\n\n}\n",
+    "contents" : "#'\n#'\n#'\n#' @param\n#' @return\n#' @export\n#'\n\nselectBestCorrelatedToLoss <- function(inputDataFrame, corrTreshold){\n\n  corTestVect <- c()\n  #leadLag <- 10\n\n\n  for(colname in colnames(inputDataFrame[, !(colnames(inputDataFrame) %in% c(\"id\", \"loss\"))])){\n\n\n\n    corTestVect <- c(corTestVect,\n\n                     cor( unlist(\n                       inputDataFrame[, (colnames(inputDataFrame) %in% paste0(colname))]\n                     ),\n                     inputDataFrame$loss,\n                     method = \"spearman\")\n\n    ) %>%\n      abs()\n  }\n\n  corTestDF <- data.frame(corTestVect, colnames(inputDataFrame[, !(colnames(inputDataFrame) %in% c(\"id\", \"loss\"))])) %>%\n    arrange(desc(corTestVect))\n  names(corTestDF) <- c(\"corToLoss\",\"colName\")\n\n  corTestDF <- corTestDF %>%\n    filter(corToLoss >= corrTreshold)\n\n  return(corTestDF)\n\n}\n",
     "created" : 1480035594008.000,
     "dirty" : false,
     "encoding" : "UTF-8",
     "folds" : "",
-    "hash" : "1635428419",
+    "hash" : "4028236658",
     "id" : "66FED884",
-    "lastKnownWriteTime" : 1480551360,
-    "last_content_update" : 1480551360546,
+    "lastKnownWriteTime" : 1481148540,
+    "last_content_update" : 1481148540634,
     "path" : "~/Desktop/GitFolder/TuataraChallenge/TuataraChallengePackage/R/selectBestCorrelatedToLoss.R",
     "project_path" : "R/selectBestCorrelatedToLoss.R",
     "properties" : {

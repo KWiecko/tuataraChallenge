@@ -33,7 +33,7 @@ trainIdxsWithoutOutliers <- removeOutliers(myInitialFactorizedData, 2)
 
 ######### Selecting most correlated vars with 'loss' and least with each other
           #normal dataset
-          bestCorrelatedColsToLoss <- selectBestCorrelatedToLoss(trainCase1SignifCorr)
+          bestCorrelatedColsToLoss <- selectBestCorrelatedToLoss(trainCase1SignifCorr, 0.2)
           trainCase1CorrToLoss <- trainCase1SignifCorr[, colnames(trainCase1SignifCorr) %in% c(as.character(bestCorrelatedColsToLoss$colName), "id", "loss")]
           
           #trainMyModels <- function(sc, trainCase1CorrToLoss ,isLossLog, noOutliersIdxs, omitOutliersforTest, omitOutliersforTrain)
@@ -41,7 +41,7 @@ trainIdxsWithoutOutliers <- removeOutliers(myInitialFactorizedData, 2)
           
           
           # dataset where loss = log(loss)
-          bestCorrelatedColsToLossLog <- selectBestCorrelatedToLoss(trainCase1SignifCorrLog)
+          bestCorrelatedColsToLossLog <- selectBestCorrelatedToLoss(trainCase1SignifCorrLog, 0.2)
           trainCase1CorrToLossLog <- trainCase1SignifCorrLog[, colnames(trainCase1SignifCorrLog) %in% c(as.character(bestCorrelatedColsToLossLog$colName), "id", "loss")]
           
           case1CorrToLossLog <-  trainMyModels(sc, trainCase1CorrToLossLog, TRUE, trainIdxsWithoutOutliers, TRUE, FALSE)

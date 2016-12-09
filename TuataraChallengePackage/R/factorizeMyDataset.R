@@ -47,29 +47,48 @@ factorizeMyDataset <- function(inputList, setToFactorize, caseOfFactorization){
   #
   if(caseOfFactorization == "case1"){
     myTrnDataset1 <- simpleFactorizer(datasetToFactorize)
-    myTrnDatasetLog1 <- myTrnDataset1 %>% mutate(loss = log(loss))
-    listOfDatasetsToReturn <- list(myTrnDataset1, myTrnDatasetLog1)
+    if(setToFactorize == "train"){
+      myTrnDatasetLog1 <- myTrnDataset1 %>% mutate(loss = log(loss))
+      listOfDatasetsToReturn <- list(myTrnDataset1, myTrnDatasetLog1)
+    }else{
+      listOfDatasetsToReturn <- list(myTrnDataset1)
+    }
   }
 
 # case 2.
   #
   if(caseOfFactorization == "case2"){
     myTrnDataset2 <- mapFactorizer(datasetToFactorize)
-    myTrnDatasetLog2 <- myTrnDataset2 %>% mutate(loss = log(loss))
-    listOfDatasetsToReturn<- list(myTrnDataset2, myTrnDatasetLog2)
+
+    if(setToFactorize == "train"){
+      myTrnDatasetLog2 <- myTrnDataset2 %>% mutate(loss = log(loss))
+      listOfDatasetsToReturn<- list(myTrnDataset2, myTrnDatasetLog2)
+    }else{
+      listOfDatasetsToReturn<- list(myTrnDataset2)
+    }
   }
 
 # case 3.
   #
   if(caseOfFactorization == "case3"){
     myTrnDataset3 <- columnSplitterAndFactorizer(datasetToFactorize)
-    myTrnDatasetLog3 <- myTrnDataset3 %>% mutate(loss = log(loss))
-    listOfDatasetsToReturn <- list(myTrnDataset3, myTrnDatasetLog3)
+
+    if(setToFactorize == "train"){
+      myTrnDatasetLog3 <- myTrnDataset3 %>% mutate(loss = log(loss))
+      listOfDatasetsToReturn <- list(myTrnDataset3, myTrnDatasetLog3)
+    }else{
+      listOfDatasetsToReturn <- list(myTrnDataset3)
+    }
+
   }
 
 
+  if(setToFactorize == "train"){
+    names(listOfDatasetsToReturn) <- c("myDataset", "myDatasetLog")
+  }else{
+    names(listOfDatasetsToReturn) <- c("myDataset")
+  }
 
-  names(listOfDatasetsToReturn) <- c("myDataset", "myDatasetLog")
 
   return(listOfDatasetsToReturn)
 
